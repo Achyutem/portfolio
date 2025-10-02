@@ -1,3 +1,5 @@
+// app/blog/[slug]/page.tsx
+
 import { getBlogPosts, getPost } from "@/data/blog";
 import { DATA } from "@/data/resume";
 import { formatDate } from "@/lib/utils";
@@ -6,11 +8,16 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import Image from "next/image";
 
+// ✅ Force dynamic rendering on Vercel
+export const dynamic = "force-dynamic";
+
+// Optional: Pre-render popular posts at build time
 export async function generateStaticParams() {
   const posts = await getBlogPosts();
   return posts.map((post) => ({ slug: post.slug }));
 }
 
+// Generate metadata for SEO & social sharing
 export async function generateMetadata({
   params,
 }: {
@@ -21,9 +28,7 @@ export async function generateMetadata({
   if (!post) return;
 
   const { title, publishedAt, summary, image } = post.metadata;
-  const ogImage = image
-    ? `${DATA.url}${image}`
-    : `${DATA.url}/og?title=${title}`;
+  const ogImage = image ? `${DATA.url}${image}` : `${DATA.url}/og?title=${title}`;
 
   return {
     title,
@@ -52,9 +57,7 @@ export default async function Blog({
 }) {
   const post = await getPost(params.slug);
 
-  if (!post) {
-    notFound();
-  }
+  if (!post) notFound();
 
   // Convert Markdown image paths to absolute URLs for Next.js Image optimization
   const contentWithAbsoluteImages = post.source.replace(
@@ -65,6 +68,7 @@ export default async function Blog({
 
   return (
     <section id="blog">
+      {/* Structured data for SEO */}
       <script
         type="application/ld+json"
         suppressHydrationWarning
@@ -88,7 +92,7 @@ export default async function Blog({
         }}
       />
 
-      {/* Render main blog image at the top */}
+      {/* Main blog image */}
       {post.metadata.image && (
         <div className="mb-6">
           <Image
