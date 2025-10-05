@@ -30,7 +30,6 @@ export function ProjectCard({
   href,
   description,
   tags,
-  link,
   image,
   links,
   className,
