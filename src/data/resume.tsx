@@ -52,7 +52,7 @@ export const DATA = {
         url: "achyutem.ad@gmail.com",
         icon: Icons.email,
 
-        navbar: false,
+        navbar: true,
       },
     },
   },
