@@ -8,25 +8,22 @@ export const DATA = {
   location: "Gorakhpur, UP",
   locationLink: "https://www.google.com/maps/place/gorakpur",
   description:
-    "Software Engineer and UI/UX Nerd. I love building things and helping people.",
+    "Software Engineer and UI/UX Nerd.",
   summary:
-    "I’m a software developer at MGUG, with prior experience at S2T.ai. I’m deeply interested in security, have a good eye for UI/UX, and I’m a big believer in open source and Linux. I enjoy spotting small everyday problems and building things to solve them whether that’s a quick script or a full application. Outside of work, I’m an animal lover and curious tinkerer who’s always looking for new ways to learn and create.",
-  avatarUrl: "/me.webp",
+    "Software developer who occasionally writes code that works. I turn coffee into features, spend hours arguing with bugs I probably caused, and specialize in solving problems nobody asked for.",
+  avatarUrl: "/me.png",
   skills: [
   "React.js",
   "Next.js",
   "TypeScript",
-  "Shadcn UI",
   "Node.js",
   "Express.js",
   "Python",
-  "MySQL",
   "PostgreSQL",
   "Convex",
   "Docker",
   "Bash",
   "Git",
-  "Postman"
 ],
   navbar: [
     { href: "/", icon: HomeIcon, label: "Home" },
