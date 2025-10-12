@@ -1,0 +1,328 @@
+---
+title: "I Only Had One Open Port - Here’s How I Hosted Multiple Node.js Backends with Nginx and systemd"
+publishedAt: "2025-10-12"
+summary: "This document explains how to host multiple Node.js backend applications** on a single port using Nginx as a reverse proxy and systemd for process management"
+---
+
+## 📖 Summary
+
+When my university gave me a VM to host my project, I was excited, until I realized only port 3000 was open. I had multiple Node.js backends to run, and I didn’t want to keep using tmux forever.
+
+This document explains how to host **multiple Node.js backend applications** on a **single port (3000)** using **Nginx** as a reverse proxy and **systemd** for process management.
+
+The setup was done on an **Arch Linux VM** with only **port 3000** open externally.  
+Initially, the backend was run using `tmux`, which worked but wasn’t sustainable for production, switching to `systemd` provided persistence, auto-restart, and easy service control.
+
+We also faced several routing issues with Nginx (`404`, `301`, double slashes), which were resolved step by step.  
+This document includes the complete thought process, key problems, and the final working configuration.
+
+---
+
+## 🏗️ Environment Overview
+
+- **OS:** Arch Linux (VM)
+- **Public Port Allowed:** `3000`
+- **Services Used:** Node.js, Nginx, systemd
+- **Frontend:** React (Vite)
+- **Backend:** Express.js API (running on internal ports, proxied via Nginx)
+
+---
+
+## ⚙️ Step 1: Node.js Backend Setup
+
+Example backend (`server.js`):
+
+```js
+import express from "express";
+const app = express();
+
+app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.send("Task Manager API is running...");
+});
+
+app.post("/api/auth/login", (req, res) => {
+  res.status(400).json({ message: "Invalid credentials" });
+});
+
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+```
+
+The backend runs internally on **port 3001**, Nginx will later forward traffic from port 3000 to this.
+
+---
+
+## ⚙️ Step 2: Running Node with systemd
+
+### 1. Create a service file:
+```bash
+sudo nano /etc/systemd/system/taskmanager.service
+```
+
+### 2. Add the following configuration:
+```ini
+[Unit]
+Description=Task Manager Backend Service
+After=network.target
+
+[Service]
+Type=simple
+User=mgug
+WorkingDirectory=/home/mgug/backend
+ExecStart=/usr/bin/node server.js
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+```
+
+### 3. Enable and start the service:
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable --now taskmanager.service
+```
+
+### 4. Check status:
+```bash
+sudo systemctl status taskmanager
+```
+
+✅ **Result:** The service runs 24/7, restarts automatically, and no longer depends on your SSH session.
+
+---
+
+## 🧾 Step 3: Viewing Logs with journalctl
+
+To view logs for your backend service:
+
+```bash
+sudo journalctl -u taskmanager -f
+```
+
+- `-u taskmanager` → logs for that specific systemd unit  
+- `-f` → follow live logs (like `tail -f`)
+
+To view older logs:
+```bash
+sudo journalctl -u taskmanager --since "2025-10-09 00:00:00"
+```
+
+This replaces the need to manually log to files or rely on console output.
+
+---
+
+## 🖥️ Step 4: (Optional) Running with tmux
+
+Originally, the backend was started using `tmux`:
+
+```bash
+tmux new -s backend
+node server.js
+```
+
+and detached with:
+```bash
+Ctrl + B, D
+```
+
+### ✅ Pros:
+- Keeps session alive even after SSH logout  
+- Easy to view and manage manually  
+
+### ❌ Cons:
+- Manual restart needed after reboots  
+- No automatic crash recovery  
+- Difficult to manage multiple backends  
+
+Hence, **systemd** was chosen for long-term reliability and automation.
+
+---
+
+## 🌐 Step 5: Nginx Configuration
+
+### 1. Install and enable Nginx:
+```bash
+sudo pacman -S nginx
+sudo systemctl enable --now nginx
+```
+
+### 2. Verify it’s running:
+```bash
+curl http://localhost
+```
+
+Expected output: Nginx welcome page.
+
+---
+
+### 3. Create an Nginx site config:
+```bash
+sudo nano /etc/nginx/sites-available/taskmanager-api.conf
+```
+
+Add the following:
+```nginx
+server {
+    listen 3000;
+    server_name _;
+
+    location /api {
+        proxy_pass http://127.0.0.1:3001;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+```
+
+Then enable it:
+```bash
+sudo ln -s /etc/nginx/sites-available/taskmanager-api.conf /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+✅ **Key Point:**  
+The absence of a trailing slash in `proxy_pass` ensures that `/api` is preserved when forwarding.  
+If you add a slash (`proxy_pass http://127.0.0.1:3001/;`), `/api` gets stripped from the path.
+
+---
+
+## 🧪 Step 6: Testing the API
+
+### Test with `curl`:
+```bash
+curl -i -X POST http://localhost:3000/api/auth/login      -H "Content-Type: application/json"      -d '{"email":"test@example.com","password":"123456"}'
+```
+
+**Expected output:**
+```
+HTTP/1.1 400 Bad Request
+{"message":"Invalid credentials"}
+```
+
+✅ This confirms Nginx → Node → Express routing works perfectly.
+
+---
+
+## 🔧 Step 7: Frontend (React + Vite) Proxy Setup
+
+In `vite.config.js`:
+
+```js
+export default defineConfig({
+  server: {
+    host: "0.0.0.0",
+    port: 5173,
+    proxy: {
+      "/api": {
+        target: "http://139.168.xxx.xx:3000",
+        changeOrigin: true,
+      },
+    },
+  },
+});
+```
+
+This allows the frontend (running on port `5173`) to make requests to `/api/...`, which are proxied to the backend through Nginx on port `3000`.
+
+---
+
+## 🧩 Step 8: Adding Another App
+
+To run multiple apps on the same port (e.g., `/newapp`):
+
+1. Create a second backend (e.g., runs on port `3002`)
+2. Add another systemd service (`newapp.service`)
+3. Update Nginx config:
+
+```nginx
+location /api {
+    proxy_pass http://127.0.0.1:3001;
+}
+
+location /newapp {
+    proxy_pass http://127.0.0.1:3002;
+}
+```
+
+Then reload:
+```bash
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+Now:
+- `http://your-ip:3000/api/...` → backend 1  
+- `http://your-ip:3000/newapp/...` → backend 2  
+
+All served securely via the same public port.
+
+---
+
+## 🧠 Key Problems Faced & Solutions
+
+| Problem | Cause | Solution | Outcome |
+|----------|--------|-----------|----------|
+| Backend stopped after SSH logout | Ran in `tmux` | Moved to `systemd` | Persistent 24/7 service |
+| Nginx returned 301 | Misconfigured `proxy_pass` | Fixed trailing slash | Correct routing |
+| 404 on POST requests | `/api` stripped by Nginx | Used `proxy_pass http://127.0.0.1:3001;` | Full path preserved |
+| Double slash in routes (`//auth/login`) | Incorrect proxy rewrite | Adjusted Nginx path | Clean, working routes |
+| Only one open port | Firewall restriction | Nginx reverse proxy | Multiple services on one public port |
+
+---
+
+## 📂 Final Directory Structure
+
+```
+/home/mgug/
+ ├── backend/
+ │    ├── server.js
+ │    └── package.json
+ ├── newapp/
+ │    ├── server.js
+ │    └── package.json
+/etc/systemd/system/
+ ├── taskmanager.service
+ ├── newapp.service
+/etc/nginx/sites-available/
+ ├── taskmanager-api.conf
+/etc/nginx/sites-enabled/
+ ├── taskmanager-api.conf → ../sites-available/taskmanager-api.conf
+```
+
+---
+
+## ✅ Final Notes
+
+- `systemd` ensures reliability, autostart, and easy monitoring (`journalctl`).
+- `nginx` allows scalable multi-app routing on a single port.
+- The `/api` vs `/` path issue is a **common proxy mistake**, remember:  
+  - Trailing slash **removes** path prefix  
+  - No slash **preserves** it
+- `tmux` is still useful for quick testing or debugging, but not for persistent services.
+
+---
+
+### 🔒 Commands Cheat Sheet
+
+| Action | Command |
+|--------|----------|
+| Start service | `sudo systemctl start taskmanager` |
+| Stop service | `sudo systemctl stop taskmanager` |
+| Restart service | `sudo systemctl restart taskmanager` |
+| Enable at boot | `sudo systemctl enable taskmanager` |
+| View logs | `sudo journalctl -u taskmanager -f` |
+| Test Nginx config | `sudo nginx -t` |
+| Reload Nginx | `sudo systemctl reload nginx` |
+
+---
+
+_Authored by: Achyutem Dubey
+Documented for internal developer use and VM-based deployments._
