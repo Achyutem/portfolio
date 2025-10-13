@@ -5,7 +5,7 @@ summary: "This document explains how to host multiple Node.js backend applicatio
 image: "/nginx.png"
 ---
 
-## 📖 Summary
+## Summary
 
 When my university gave me a VM to host my project, I was excited, until I realized only port 3000 was open. I had multiple Node.js backends to run, and I didn’t want to keep using tmux forever.
 
@@ -19,7 +19,7 @@ This document includes the complete thought process, key problems, and the final
 
 ---
 
-## 🏗️ Environment Overview
+## Environment Overview
 
 - **OS:** Arch Linux (VM)
 - **Public Port Allowed:** `3000`
@@ -29,7 +29,7 @@ This document includes the complete thought process, key problems, and the final
 
 ---
 
-## ⚙️ Step 1: Node.js Backend Setup
+## Step 1: Node.js Backend Setup
 
 Example backend (`server.js`):
 
@@ -57,7 +57,7 @@ The backend runs internally on **port 3001**, Nginx will later forward traffic f
 
 ---
 
-## ⚙️ Step 2: Running Node with systemd
+## Step 2: Running Node with systemd
 
 ### 1. Create a service file:
 ```bash
@@ -96,7 +96,7 @@ sudo systemctl status taskmanager
 
 ---
 
-## 🧾 Step 3: Viewing Logs with journalctl
+## Step 3: Viewing Logs with journalctl
 
 To view logs for your backend service:
 
@@ -116,7 +116,7 @@ This replaces the need to manually log to files or rely on console output.
 
 ---
 
-## 🖥️ Step 4: (Optional) Running with tmux
+## Step 4: (Optional) Running with tmux
 
 Originally, the backend was started using `tmux`:
 
@@ -143,7 +143,7 @@ Hence, **systemd** was chosen for long-term reliability and automation.
 
 ---
 
-## 🌐 Step 5: Nginx Configuration
+## Step 5: Nginx Configuration
 
 ### 1. Install and enable Nginx:
 ```bash
@@ -195,7 +195,7 @@ If you add a slash (`proxy_pass http://127.0.0.1:3001/;`), `/api` gets stripped 
 
 ---
 
-## 🧪 Step 6: Testing the API
+## Step 6: Testing the API
 
 ### Test with `curl`:
 ```bash
@@ -212,7 +212,7 @@ HTTP/1.1 400 Bad Request
 
 ---
 
-## 🔧 Step 7: Frontend (React + Vite) Proxy Setup
+## Step 7: Frontend (React + Vite) Proxy Setup
 
 In `vite.config.js`:
 
@@ -235,7 +235,7 @@ This allows the frontend (running on port `5173`) to make requests to `/api/...`
 
 ---
 
-## 🧩 Step 8: Adding Another App
+## Step 8: Adding Another App
 
 To run multiple apps on the same port (e.g., `/newapp`):
 
@@ -267,7 +267,7 @@ All served securely via the same public port.
 
 ---
 
-## 🧠 Key Problems Faced & Solutions
+## Key Problems Faced & Solutions
 
 | Problem | Cause | Solution | Outcome |
 |----------|--------|-----------|----------|
@@ -279,7 +279,7 @@ All served securely via the same public port.
 
 ---
 
-## 📂 Final Directory Structure
+## Final Directory Structure
 
 ```
 /home/mgug/
@@ -311,7 +311,7 @@ All served securely via the same public port.
 
 ---
 
-### 🔒 Commands Cheat Sheet
+### Commands Cheat Sheet
 
 | Action | Command |
 |--------|----------|
@@ -325,5 +325,5 @@ All served securely via the same public port.
 
 ---
 
-_Authored by: Achyutem Dubey
-Documented for internal developer use and VM-based deployments._
+Authored by: Achyutem Dubey
+Documented for internal developer use and VM-based deployments.
