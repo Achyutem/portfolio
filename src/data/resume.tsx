@@ -7,24 +7,23 @@ export const DATA = {
   url: "https://achyutem.vercel.app",
   location: "Gorakhpur, UP",
   locationLink: "https://www.google.com/maps/place/gorakpur",
-  description:
-    "Software Engineer and UI/UX Nerd.",
+  description: "Software Engineer and UI/UX Nerd.",
   summary:
     "Software developer who occasionally writes code that works. I turn coffee into features, spend hours arguing with bugs I probably caused, and specialize in solving problems nobody asked for.",
   avatarUrl: "/me.png",
   skills: [
-  "React.js",
-  "Next.js",
-  "TypeScript",
-  "Node.js",
-  "Express.js",
-  "Python",
-  "PostgreSQL",
-  "Convex",
-  "Docker",
-  "Bash",
-  "Git",
-],
+    "React.js",
+    "Next.js",
+    "TypeScript",
+    "Node.js",
+    "Express.js",
+    "Python",
+    "PostgreSQL",
+    "Convex",
+    "Docker",
+    "Bash",
+    "Git",
+  ],
   navbar: [
     { href: "/", icon: HomeIcon, label: "Home" },
     { href: "/blog", icon: NotebookIcon, label: "Blog" },
@@ -102,103 +101,88 @@ export const DATA = {
     },
   ],
   projects: [
-  {
-    title: "Hire Truth",
-    href: "https://hire-truth.vercel.app",
-    dates: "2024 – Present",
-    active: true,
-    description:
-      "Community-driven platform to share and read honest reviews about companies that ghost candidates or demand immediate joining. Helps job seekers make better decisions with transparent insights.",
-    technologies: [
-      "Next.js",
-      "TypeScript",
-      "TailwindCSS",
-      "PostgreSQL",
-    ],
-    links: [
-      {
-        type: "Website",
-        href: "https://hire-truth.vercel.app",
-        icon: <Icons.globe className="size-3" />,
-      },
-    ],
-    image: "/hire-truth.png",
-  },
-  {
-    title: "NotesForge",
-    href: "https://github.com/Achyutem/NotesForge",
-    dates: "2024 – Present",
-    active: true,
-    description:
-      "A fast, lightweight task manager built with Next.js and TypeScript. Focused on efficiency and simplicity with SQLite backend, designed for personal productivity and small teams.",
-    technologies: [
-      "Next.js",
-      "TypeScript",
-      "SQLite",
-      "TailwindCSS",
-    ],
-    links: [
-      {
-        type: "Source",
-        href: "https://github.com/Achyutem/NotesForge",
-        icon: <Icons.github className="size-3" />,
-      },
-    ],
-    image: "/notes.png",
-  },
-  {
-    title: "Jan Ausadhi Catalog",
-    href: "https://achyutem.github.io/JanAushadhi?ref=portfolio",
-    dates: "2023",
-    active: true,
-    description:
-      "A lightweight, installable PWA supporting India’s Pradhan Mantri Bhartiya Janaushadhi Pariyojana (PMBJP). Provides a clean, ad-free way to explore generic medicines and compare prices.",
-    technologies: [
-      "PWA",
-      "JavaScript",
-      "HTML",
-      "CSS",
-    ],
-    links: [
-      {
-        type: "Website",
-        href: "https://achyutem.github.io/JanAushadhi?ref=portfolio",
-        icon: <Icons.globe className="size-3" />,
-      },
-      {
-        type: "Source",
-        href: "https://github.com/Achyutem/JanAushadhi",
-        icon: <Icons.github className="size-3" />,
-      },
-    ],
-    image: "/medicine.png",
-  },
-  {
-    title: "Inflation Calculator",
-    href: "https://achyutem.github.io/inflation/?ref=github",
-    dates: "2023",
-    active: true,
-    description:
-      "Interactive tool to track and visualize the inflation of Indian currency over time, helping users understand purchasing power changes and financial trends.",
-    technologies: [
-      "JavaScript",
-      "HTML",
-      "CSS",
-      "FOSS",
-    ],
-    links: [
-      {
-        type: "Website",
-        href: "https://achyutem.github.io/inflation/?ref=github",
-        icon: <Icons.globe className="size-3" />,
-      },
-      {
-        type: "Source",
-        href: "https://github.com/Achyutem/inflation",
-        icon: <Icons.github className="size-3" />,
-      },
-    ],
-    image: "/inflation.png",
-  },
-],
+    {
+      title: "Hire Truth",
+      href: "https://hire-truth.vercel.app",
+      dates: "2024 – Present",
+      active: true,
+      description:
+        "Community-driven platform to share and read honest reviews about companies that ghost candidates or demand immediate joining. Helps job seekers make better decisions with transparent insights.",
+      technologies: ["Next.js", "TypeScript", "TailwindCSS", "PostgreSQL"],
+      links: [
+        {
+          type: "Website",
+          href: "https://hire-truth.vercel.app",
+          icon: <Icons.globe className="size-3" />,
+        },
+      ],
+      image: "/hire-truth.png",
+    },
+    {
+      title: "NotesForge",
+      href: "https://github.com/Achyutem/NotesForge",
+      dates: "2024 – Present",
+      active: true,
+      description:
+        "A fast, lightweight task manager built with Next.js and TypeScript. Focused on efficiency and simplicity with SQLite backend, designed for personal productivity and small teams.",
+      technologies: ["Next.js", "TypeScript", "SQLite", "TailwindCSS"],
+      links: [
+        {
+          type: "Website",
+          href: "https://notesforge-ad.vercel.app/",
+          icon: <Icons.globe className="size-3" />,
+        },
+        {
+          type: "Source",
+          href: "https://github.com/Achyutem/NotesForge",
+          icon: <Icons.github className="size-3" />,
+        },
+      ],
+      image: "/notes.png",
+    },
+    {
+      title: "Jan Ausadhi Catalog",
+      href: "https://achyutem.github.io/JanAushadhi?ref=portfolio",
+      dates: "2023",
+      active: true,
+      description:
+        "A lightweight, installable PWA supporting India’s Pradhan Mantri Bhartiya Janaushadhi Pariyojana (PMBJP). Provides a clean, ad-free way to explore generic medicines and compare prices.",
+      technologies: ["PWA", "JavaScript", "HTML", "CSS"],
+      links: [
+        {
+          type: "Website",
+          href: "https://achyutem.github.io/JanAushadhi?ref=portfolio",
+          icon: <Icons.globe className="size-3" />,
+        },
+        {
+          type: "Source",
+          href: "https://github.com/Achyutem/JanAushadhi",
+          icon: <Icons.github className="size-3" />,
+        },
+      ],
+      image: "/medicine.png",
+    },
+    {
+      title: "Inflation Calculator",
+      href: "https://achyutem.github.io/inflation/?ref=github",
+      dates: "2023",
+      active: true,
+      description:
+        "Interactive tool to track and visualize the inflation of Indian currency over time, helping users understand purchasing power changes and financial trends.",
+      technologies: ["JavaScript", "HTML", "CSS", "FOSS"],
+      links: [
+        {
+          type: "Website",
+          href: "https://achyutem.github.io/inflation/?ref=github",
+          icon: <Icons.globe className="size-3" />,
+        },
+        {
+          type: "Source",
+          href: "https://github.com/Achyutem/inflation",
+          icon: <Icons.github className="size-3" />,
+        },
+      ],
+      image: "/inflation.png",
+    },
+  ],
 } as const;
