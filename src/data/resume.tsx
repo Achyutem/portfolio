@@ -58,6 +58,18 @@ export const DATA = {
 
   work: [
     {
+      company: "Entiovi Technologies",
+      href: "https://entiovi.com",
+      badges: [],
+      location: "Remote",
+      title: "Software Engineer",
+      logoUrl: "/entiovi.jpg",
+      start: "December 2025",
+      end: "Current",
+      description:
+        "Developing, maintaining, and debugging shipping features for the pop.store project",
+    },
+    {
       company: "MGUG",
       href: "https://mgug.ac.in",
       badges: [],
@@ -65,7 +77,7 @@ export const DATA = {
       title: "Software Developer",
       logoUrl: "/mgug.png",
       start: "April 2025",
-      end: "Current",
+      end: "December 2025",
       description:
         "Migrated legacy Core PHP LMS to React/TypeScript/Express, achieving ~18× faster load speeds and ~40% lower CPU usage. Rebuilt the main university website with SSR, code-splitting, and caching, improving Lighthouse score from 41→95 and reducing load time by 12s. Built an internal workflow & collaboration hub with real-time updates and role-based dashboards, cutting manual coordination by ~50%.",
     },
