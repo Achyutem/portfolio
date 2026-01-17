@@ -1,5 +1,6 @@
 import BlurFade from "@/components/magicui/blur-fade";
 import BlurFadeText from "@/components/magicui/blur-fade-text";
+import { StripedPattern } from "@/components/magicui/striped-pattern";
 import { ProjectCard } from "@/components/project-card";
 import { ResumeCard } from "@/components/resume-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -40,6 +41,7 @@ export default function Page() {
       </section>
       {/* about */}
       <section id="about">
+        <StripedPattern className="[mask-image:radial-gradient(300px_circle_at_center,white,transparent)]" />
         <BlurFade delay={BLUR_FADE_DELAY * 3}>
           <h2 className="text-xl font-bold">About</h2>
         </BlurFade>
@@ -49,7 +51,7 @@ export default function Page() {
           </Markdown>
         </BlurFade>
       </section>
-            {/* skills */}
+      {/* skills */}
       <section id="skills">
         <div className="flex min-h-0 flex-col gap-y-3">
           <BlurFade delay={BLUR_FADE_DELAY * 9}>
