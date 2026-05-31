@@ -1,6 +1,5 @@
 import BlurFade from "@/components/magicui/blur-fade";
 import BlurFadeText from "@/components/magicui/blur-fade-text";
-import { StripedPattern } from "@/components/magicui/striped-pattern";
 import { ProjectCard } from "@/components/project-card";
 import { ResumeCard } from "@/components/resume-card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -8,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { DATA } from "@/data/resume";
 import Link from "next/link";
 import Markdown from "react-markdown";
+import { NowPlaying } from "@/components/now-playing";
 
 const BLUR_FADE_DELAY = 0.04;
 
@@ -41,7 +41,6 @@ export default function Page() {
       </section>
       {/* about */}
       <section id="about">
-        <StripedPattern className="[mask-image:radial-gradient(300px_circle_at_center,white,transparent)]" />
         <BlurFade delay={BLUR_FADE_DELAY * 3}>
           <h2 className="text-xl font-bold">About</h2>
         </BlurFade>
@@ -181,6 +180,18 @@ export default function Page() {
             </div>
           </BlurFade>
         </div>
+      </section>
+
+      {/* Music Section */}
+      <section id="music">
+        <BlurFade delay={BLUR_FADE_DELAY * 17}>
+          <div className="flex flex-col items-center space-y-6">
+            <h2 className="text-2xl font-bold">Now Playing</h2>
+            <div className="w-full max-w-md">
+              <NowPlaying />
+            </div>
+          </div>
+        </BlurFade>
       </section>
     </main>
   );
